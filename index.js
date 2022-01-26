@@ -2,7 +2,7 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 let x = canvas.width / 2;
 let y = canvas.height - 30;
-let dx = 3;
+let dx = 2;
 let dy = -2;
 const ballRadius = 10;
 let ballColor = 'red';
@@ -13,6 +13,7 @@ let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
 const interval = setInterval(draw, 10);
+let score = 0;
 
 // Bricks
 const brickRowCount = 3;
@@ -72,10 +73,22 @@ function collisonDetection() {
         if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
           dy = -dy;
           b.status = 0;
+          score += 1;
+          if (score === brickRowCount * brickColumnCount) {
+            alert('YOU WIN, CONGRATULATIONS!');
+            document.location.reload();
+            clearInterval(interval);
+          }
         }
       }
     }
   }
+}
+
+function drawScore() {
+  ctx.font = '16px Arial';
+  ctx.fillStyle = '#0095DD';
+  ctx.fillText(`Score  ${+score}`, 8, 20);
 }
 
 function draw() {
@@ -83,6 +96,7 @@ function draw() {
   drawBricks();
   drawBall();
   drawPaddle();
+  drawScore();
   collisonDetection();
 
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
