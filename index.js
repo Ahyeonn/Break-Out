@@ -12,6 +12,7 @@ const paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
+const interval = setInterval(draw, 10);
 
 function drawBall() {
   ctx.beginPath();
@@ -38,8 +39,16 @@ function draw() {
     dx = -dx;
     ballColor = `hsl(${hue}, 100%, 50%)`;
   }
-  if (y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
+  if (y + dy < ballRadius) {
     dy = -dy;
+  } else if (y + dy > canvas.height - ballRadius) {
+    if (x > paddleX && x < paddleX + paddleWidth) {
+      dy = -dy;
+    } else {
+      alert('GAME OVER');
+      document.location.reload();
+      clearInterval(interval);
+    }
   }
   if (rightPressed) {
     paddleX += 7;
@@ -74,5 +83,3 @@ function keyUpHandler(e) {
 }
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
-
-setInterval(draw, 10);
