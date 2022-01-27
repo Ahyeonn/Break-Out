@@ -16,18 +16,26 @@ let score = 0;
 let lives = 3;
 
 // Bricks
-const brickRowCount = 3;
-const brickColumnCount = 5;
-const brickWidth = 75;
-const brickHeight = 20;
+const brickRowCount = 4;
+const brickColumnCount = 8;
+const brickWidth = 45;
+const brickHeight = 15;
 const brickPadding = 10;
-const brickOffsetTop = 30;
+const brickOffsetTop = 40;
 const brickOffsetLeft = 30;
 const bricks = [];
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r += 1) {
-    bricks[c][r] = { x: 0, y: 0, status: 1 };
+    if (c % 2 === 0) {
+      bricks[c][r] = {
+        x: 0, y: 0, status: 1, color: 'red',
+      };
+    } else {
+      bricks[c][r] = {
+        x: 0, y: 0, status: 1, color: 'blue',
+      };
+    }
   }
 }
 
@@ -42,7 +50,7 @@ function drawBall() {
 function drawPaddle() {
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = 'yellow';
   ctx.fill();
   ctx.closePath();
 }
@@ -57,7 +65,7 @@ function drawBricks() {
         bricks[c][r].y = brickY;
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = '#0095DD';
+        ctx.fillStyle = bricks[c][r].color;
         ctx.fill();
         ctx.closePath();
       }
@@ -85,19 +93,28 @@ function collisonDetection() {
 }
 
 function drawScore() {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = '#0095DD';
+  ctx.font = '18px Arial';
+  ctx.fillStyle = 'black';
   ctx.fillText(`Score:  ${+score}`, 8, 20);
 }
 
 function drawLives() {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = '#0095DD';
-  ctx.fillText(`Lives: ${+lives}`, canvas.width - 65, 20);
+  ctx.font = '18px Arial';
+  ctx.fillStyle = 'black';
+  ctx.fillText(`Lives: ${+lives}`, canvas.width - 70, 20);
+}
+
+function drawBackground() {
+  ctx.beginPath();
+  ctx.rect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'orange';
+  ctx.fill();
+  ctx.closePath();
 }
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBackground();
   drawBricks();
   drawBall();
   drawPaddle();
